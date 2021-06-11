@@ -2,16 +2,20 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
   ManyToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from 'typeorm';
+} from "typeorm";
 
-import { User } from '../../users/entities/User';
+import { Order } from "../../orders/entities/Order";
+import { User } from "../../users/entities/User";
+import { Genre } from "./Genre";
 
-@Entity('games')
+@Entity("games")
 export class Game {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column()
@@ -19,6 +23,16 @@ export class Game {
 
   @ManyToMany(() => User, (user) => user.games)
   users: User[];
+
+  @Column()
+  genre_id: string;
+
+  @ManyToOne(() => Genre, (genre) => genre.games)
+  genre: Genre;
+
+  @ManyToMany(() => Order, (order) => order.games)
+  @JoinTable()
+  orders: Order[];
 
   @CreateDateColumn()
   created_at: Date;
